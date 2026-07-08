@@ -2,11 +2,11 @@ name: Compilar Proyecto para iOS
 
 on:
   push:
-    branches: [ main ] # Cambiá "main" por el nombre de tu rama principal si es diferente
+    branches: [ main ]
 
 jobs:
   build-ios:
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
     - name: Descargar codigo del repositorio
@@ -20,10 +20,12 @@ jobs:
     - name: Instalar dependencias del proyecto
       run: npm install
 
-   
+    - name: Crear carpeta web si no existe
+      run: mkdir -p www
+
     - name: Instalar plataforma iOS de Capacitor
       run: |
-        npx cap add ios
+        npx cap add ios || true
         npx cap sync ios
 
     - name: Compilar aplicacion nativa en Xcode
