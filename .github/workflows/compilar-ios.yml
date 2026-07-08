@@ -1,0 +1,44 @@
+yamlname: Compilar Proyecto para iOS
+
+on:
+  push:
+    branches: [ main ] # Cambiá "main" por el nombre de tu rama principal si es diferente
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+    - name: Descargar codigo del repositorio
+      uses: actions/checkout@v4
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Instalar dependencias del proyecto
+      run: npm install
+
+    - name: Construir proyecto web
+      run: npm run build # Cambiá esto por el comando con el que compilás tu HTML/JS (ej. vite build) si usás algún framework
+
+    - name: Instalar plataforma iOS de Capacitor
+      run: |
+        npx cap add ios
+        npx cap sync ios
+
+    - name: Compilar aplicacion nativa en Xcode
+      run: |
+        xcodebuild -workspace ios/App/App.xcworkspace \
+                   -scheme App \
+                   -configuration Debug \
+                   -sdk iphoneos \
+                   CODE_SIGNING_ALLOWED=NO \
+                   clean build
+
+    - name: Subir resultado comprimido
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-ios-compilada
+        path: ios/App/build/
