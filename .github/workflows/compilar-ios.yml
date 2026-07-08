@@ -1,4 +1,4 @@
-yamlname: Compilar Proyecto para iOS
+name: Compilar Proyecto para iOS
 
 on:
   push:
@@ -20,9 +20,7 @@ jobs:
     - name: Instalar dependencias del proyecto
       run: npm install
 
-    - name: Construir proyecto web
-      run: npm run build # Cambiá esto por el comando con el que compilás tu HTML/JS (ej. vite build) si usás algún framework
-
+   
     - name: Instalar plataforma iOS de Capacitor
       run: |
         npx cap add ios
